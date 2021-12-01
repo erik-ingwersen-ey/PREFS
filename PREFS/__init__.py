@@ -321,7 +321,7 @@ class PrefsBase:
 
 		if not isinstance(prefs, dict): # If isn't a dict raise error
 				raise TypeError(f"prefs argument must be a dictionary or a function with a dictionary as return value, gived {type(prefs)}")
-		
+
 		result = "" # String to append each pref:value combination
 		indent_char = self.INDENT_CHAR * depth # Multiply depth by a tabulation, e.i.: if depth 0 no tabulation.
 
@@ -335,9 +335,7 @@ class PrefsBase:
 
 			result += f"{indent_char}{key}{self.SEPARATOR_CHAR}{val!r}{self.ENDER_CHAR}" # Write key:value (str) with quotes
 
-		return result
-
-		self.check_file() # Read prefs to check the Prefs file and update file attribute 
+		return result 
 
 	def check_key(self, key: str) -> None:
 		if not isinstance(key, str):
@@ -415,8 +413,8 @@ class PrefsBase:
 				The given dictionary changing the given key to the given value.
 		"""
 		keys = keys.split("/") # Split the keys by /
-		
-		if not keys[0] in dict_:
+
+		if keys[0] not in dict_:
 			dict_[keys[0]] = {}
 
 		scn_dict = dict_[keys[0]] # Set scn_dict to the first key of dict_
@@ -425,7 +423,7 @@ class PrefsBase:
 
 		for e, i in enumerate(keys): # Iterate through the keys
 			if e < len(keys) - 1: # While  key isn't the last
-				if not i in scn_dict and self.auto_generate_keys:
+				if i not in scn_dict and self.auto_generate_keys:
 					scn_dict[i] = {}
 
 				scn_dict = scn_dict[i] # Set scn_dict to scn_dict key
@@ -433,7 +431,7 @@ class PrefsBase:
 
 			else: # If last key
 				scn_dict[i] = val # Set key to val
-				
+
 		return dict_
 
 	def overwrite_prefs(self, prefs: dict = None) -> None:
@@ -448,9 +446,8 @@ class PrefsBase:
 		if not os.path.isfile(self.filename):
 			raise FileNotFoundError("Cannot overwrite unexistent prefs") # If file isn't in the path raise error
 
-		if prefs is not None: # If prefs isn't none it must be a dictionary
-			if not isinstance(prefs, dict):  # If isn't a dict raise error
-				raise TypeError(f"prefs must be a dictionary or a function with a dictionary as return value, gived {type(prefs)}")
+		if prefs is not None and not isinstance(prefs, dict):  # If isn't a dict raise error
+			raise TypeError(f"prefs must be a dictionary or a function with a dictionary as return value, gived {type(prefs)}")
 
 		if self.verbose: print(f"Trying to overwrite {self.prefs} in {self.filename}")
 
@@ -758,5 +755,4 @@ def convert_to_prefs(*args, output: str=None, **kwargs) -> (str, None):
 	with open(output, "w+") as file:
 		file.write(prefs_instance.dump())
 
-if __name__ == "__main__":
-	pass
+pass
