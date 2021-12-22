@@ -48,10 +48,9 @@ def remove_comments(string: str, comment_char: str="#") -> str:
 	quote = "" # Type of quote (simple or double), because you can't open a string with simple quotes and close it with double
 
 	for e, char in enumerate(string): # Iterate thorught the string
-		if char == "'" or char == '"': # Checks if the current character is a quote
-			if e != 0: # Checks if the quote isn't in the first place
-				if string[e -1] == "\\": # Checks if the character before it is a backslahs
-					continue # If it is ignore it
+		if char in ["'", '"']: # Checks if the current character is a quote
+			if e != 0 and string[e - 1] == "\\": # Checks if the character before it is a backslahs
+				continue # If it is ignore it
 
 			if quote == char or not in_string: # If the type of quote is the current char, or if isn't in a string
 				quote = char # Set the quote to the char
